@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LinkResource\RelationManagers;
+namespace App\Filament\Resources\LinksResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,14 +12,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ClicksRelationManager extends RelationManager
 {
-    protected static string $relationship = 'clicks';
-    protected static ?string $title = 'Klik';
+    protected static string $relationship = 'Clicks';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('Links')
+                Forms\Components\TextInput::make('Clicks')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -28,6 +27,7 @@ class ClicksRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('Clicks')
             ->columns([
                 Tables\Columns\TextColumn::make('ip_address')->label('IP'),
                 Tables\Columns\TextColumn::make('browser'),
@@ -36,6 +36,20 @@ class ClicksRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('country'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime(),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->filters([
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 }

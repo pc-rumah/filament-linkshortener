@@ -60,13 +60,13 @@ class LinksResource extends Resource
                     ->label('QR')
                     ->getStateUsing(fn($record) => route('link.qr', $record->slug))
                     ->square(),
-
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -18,7 +18,7 @@ class Links extends Model
 
     public function clicks()
     {
-        return $this->hasMany(LinkClicks::class);
+        return $this->hasMany(LinkClicks::class, 'link_id');
     }
 
     public function user()
