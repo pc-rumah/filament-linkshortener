@@ -56,6 +56,11 @@ class LinksResource extends Resource
                 Tables\Columns\TextColumn::make('clicks_count')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('qr')
+                    ->label('QR')
+                    ->getStateUsing(fn($record) => route('link.qr', $record->slug))
+                    ->square(),
+
             ])
             ->filters([
                 //
