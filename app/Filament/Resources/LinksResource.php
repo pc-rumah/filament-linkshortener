@@ -23,17 +23,18 @@ class LinksResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('slug')
-                    ->helperText('Biarkan kosong untuk generate otomatis')
-                    ->unique(ignoreRecord: true),
                 Forms\Components\Textarea::make('original_url')
                     ->rules('required', 'url')
                     ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_active')
-                    ->label('Aktif')
-                    ->default(true),
+                Forms\Components\TextInput::make('slug')
+                    ->helperText('Biarkan kosong untuk generate otomatis')
+                    ->unique(ignoreRecord: true),
                 Forms\Components\DateTimePicker::make('expired_at')
                     ->nullable(),
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Aktif')
+                    ->offColor('danger')
+                    ->default(true),
             ]);
     }
 
@@ -41,20 +42,19 @@ class LinksResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('original_url')
+                    ->limit(30)
+                    ->label('URL Asli'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('original_url')
-                    ->limit(30)
-                    ->label('URL Asli'),
                 Tables\Columns\TextColumn::make('expired_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('qr_code_path')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('clicks_count')
                     ->numeric()
+                    ->label('Klik')
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('qr')
                     ->label('QR')
