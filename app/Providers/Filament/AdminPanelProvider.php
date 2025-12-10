@@ -8,6 +8,7 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Illuminate\Session\Middleware\StartSession;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -62,6 +63,10 @@ class AdminPanelProvider extends PanelProvider
                 EasyFooterPlugin::make()
                     ->withLoadTime('This Page Loaded In ')
                     ->withSentence('LinkShortener.'),
+                BreezyCore::make()
+                    ->myProfile(
+                        hasAvatars: true,
+                    )
             ]);
     }
 }
