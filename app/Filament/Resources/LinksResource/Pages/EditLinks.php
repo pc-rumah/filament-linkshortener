@@ -23,4 +23,13 @@ class EditLinks extends EditRecord
         $data['user_id'] = auth()->id();
         return $data;
     }
+
+    protected function authorizeAccess(): void
+    {
+        $record = $this->getRecord();
+
+        if (!auth()->user()->hasRole('superadmin') && $record->user_id !== auth()->id()) {
+            abort(403);
+        }
+    }
 }

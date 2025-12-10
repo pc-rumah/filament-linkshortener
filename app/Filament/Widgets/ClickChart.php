@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class ClickChart extends ChartWidget
 {
-    protected static ?string $heading = 'Chart';
+    protected static ?string $heading = '7 Hari terakhir Klik';
 
     protected function getData(): array
     {

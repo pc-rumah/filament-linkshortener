@@ -62,4 +62,19 @@ class User extends Authenticatable implements HasAvatar
             }
         });
     }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plans::class);
+    }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscriptions::class)->where('status', 'active');
+    }
+
+    public function isPro()
+    {
+        return $this->plan?->slug === 'pro';
+    }
 }
