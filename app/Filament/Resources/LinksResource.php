@@ -2,20 +2,36 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LinksResource\Pages;
-use App\Filament\Resources\LinksResource\RelationManagers;
-use App\Models\Links;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Links;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\LinksResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\LinksResource\RelationManagers;
 
 class LinksResource extends Resource
 {
     protected static ?string $model = Links::class;
+
+    protected function beforeCreate()
+    {
+        $user = auth()->user();
+
+        if (!$user->canCreateMoreLinks()) {
+            Notification::make()
+                ->title('Limit tercapai')
+                ->body('Kamu telah mencapai limit link untuk plan ' . $user->plan->name)
+                ->danger()
+                ->send();
+
+            $this->halt();
+        }
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

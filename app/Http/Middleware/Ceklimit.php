@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Links;
 use Closure;
+use App\Models\Links;
+use App\Models\Plans;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,10 +13,21 @@ class Ceklimit
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
+
+        // KALAU USER TIDAK LOGIN → lanjutkan saja
+        // ini untuk public redirect /r/{slug}
+        if (!$user) {
+            return $next($request);
+        }
+
         $plan = $user->plan;
 
-        $maxLinks = $plan->features['max_links'];
+        if (!$plan) {
+            // fallback misal otomatis ke plan basic
+            $plan = Plans::where('slug', 'basic')->first();
+        }
 
+        $maxLinks = $plan->features['max_links'];
         $currentLinks = Links::where('user_id', $user->id)->count();
 
         if ($currentLinks >= $maxLinks) {

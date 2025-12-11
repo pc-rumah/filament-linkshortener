@@ -10,8 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/r/{slug}', [RedirectController::class, 'redirect'])
-    ->name('link.redirect')
-    ->middleware(Ceklimit::class);
+    ->name('link.redirect');
 
 Route::get('/qr/{slug}', [QrController::class, 'generate'])
     ->name('link.qr');
