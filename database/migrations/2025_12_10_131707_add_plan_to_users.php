@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('plan_id')->nullable()->constrained('plans');
+            $table->foreignId('plan_id')->default(1)->nullable()->constrained('plans');
             $table->date('plan_expired_at')->nullable();
         });
     }
@@ -23,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropForeign(['plan_id']);
+            $table->dropColumn(['plan_id', 'plan_expired_at']);
         });
     }
 };

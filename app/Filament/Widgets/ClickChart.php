@@ -8,7 +8,7 @@ use Filament\Widgets\ChartWidget;
 class ClickChart extends ChartWidget
 {
     protected static ?string $heading = '7 Hari terakhir Klik';
-
+    protected static ?int $sort = 6;
     protected function getData(): array
     {
         $dates = collect(range(6, 0))->map(function ($i) {

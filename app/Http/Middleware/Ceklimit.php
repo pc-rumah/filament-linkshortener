@@ -14,8 +14,6 @@ class Ceklimit
     {
         $user = auth()->user();
 
-        // KALAU USER TIDAK LOGIN → lanjutkan saja
-        // ini untuk public redirect /r/{slug}
         if (!$user) {
             return $next($request);
         }
