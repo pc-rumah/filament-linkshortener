@@ -90,10 +90,16 @@
         </div>
     </div>
     {{-- MIDTRANS POPUP SCRIPT --}}
-    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
+    </script>
 
     <script>
         document.getElementById('pay-pro').addEventListener('click', function() {
+            // Optional: tampilkan loading
+            let btn = this;
+            btn.disabled = true;
+            btn.innerHTML = 'Memproses...';
+
             fetch('/billing/pay', {
                     method: 'POST',
                     headers: {
@@ -106,7 +112,24 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    snap.pay(data.token);
+                    snap.pay(data.token, {
+                        onSuccess: function(result) {
+                            window.location.href = "/admin?payment=success";
+                        },
+                        onPending: function() {
+                            alert("Menunggu pembayaran");
+                        },
+                        onError: function() {
+                            alert("Pembayaran gagal");
+                        }
+                    });
+                })
+                .catch(() => {
+                    alert("Terjadi kesalahan. Silakan coba lagi.");
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="btn-text">Upgrade to Pro</span><svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
                 });
         });
     </script>

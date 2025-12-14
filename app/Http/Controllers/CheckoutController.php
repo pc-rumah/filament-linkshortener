@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plans;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CheckoutController extends Controller
 {
@@ -72,6 +73,13 @@ class CheckoutController extends Controller
                     'plan' => 'pro',
                     'plan_expired_at' => now()->addMonth()
                 ]);
+
+                // SIMPAN FLAG NOTIF (5 menit cukup)
+                Cache::put(
+                    'payment_success_user_' . $transaction->user_id,
+                    true,
+                    now()->addMinutes(5)
+                );
             }
         } elseif ($status == 'pending') {
             $transaction->update(['status' => 'pending']);
