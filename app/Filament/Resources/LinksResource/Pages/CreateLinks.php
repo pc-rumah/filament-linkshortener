@@ -17,27 +17,10 @@ class CreateLinks extends CreateRecord
     {
         $user = auth()->user();
 
-        // Ambil plan
-        $plan = $user->plan ?? \App\Models\Plans::where('slug', 'basic')->first();
-        $maxLinks = $plan->features['max_links'];
-
-        // Hitung link user
-        $currentLinks = \App\Models\Links::where('user_id', $user->id)->count();
-
-        if ($currentLinks >= $maxLinks) {
-            Notification::make()
-                ->title('Limit tercapai')
-                ->danger()
-                ->body("Kamu sudah mencapai limit link untuk plan {$plan->name}. Upgrade ke Pro.")
-                ->send();
-
-            $this->halt();
-        }
-
-        // Auto set user_id
+        // Set owner
         $data['user_id'] = $user->id;
 
-        // Auto generate slug jika kosong
+        // Auto slug
         if (empty($data['slug'])) {
             $data['slug'] = Str::random(6);
         }

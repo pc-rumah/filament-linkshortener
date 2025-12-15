@@ -29,6 +29,8 @@ class User extends Authenticatable implements HasAvatar
         'email',
         'password',
         'avatar_url',
+        'plan_id',
+        'plan_expired_at',
     ];
 
     /**
@@ -76,5 +78,10 @@ class User extends Authenticatable implements HasAvatar
     public function isPro()
     {
         return $this->plan?->slug === 'pro';
+    }
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

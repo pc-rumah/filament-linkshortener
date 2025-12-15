@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\LinksResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\LinksResource\RelationManagers;
+use Filament\Tables\Columns\TextColumn;
 
 class LinksResource extends Resource
 {
@@ -33,7 +34,7 @@ class LinksResource extends Resource
         }
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-link';
 
     public static function form(Form $form): Form
     {
@@ -45,8 +46,9 @@ class LinksResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->helperText('Biarkan kosong untuk generate otomatis')
                     ->unique(ignoreRecord: true),
-                Forms\Components\DateTimePicker::make('expired_at')
-                    ->nullable(),
+                Forms\Components\DatePicker::make('expired_at')
+                    ->nullable()
+                    ->format('d/m/Y'),
                 Forms\Components\Toggle::make('is_active')
                     ->label('Aktif')
                     ->offColor('danger')
@@ -64,10 +66,14 @@ class LinksResource extends Resource
                     ->label('URL Asli'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                TextColumn::make('short_url')
+                    ->label('URL Pendek')
+                    ->getStateUsing(fn($record) => route('link.redirect', $record->slug))
+                    ->copyable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('expired_at')
-                    ->dateTime()
+                    ->dateTime('d M Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('clicks_count')
                     ->numeric()
