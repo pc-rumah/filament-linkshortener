@@ -9,6 +9,12 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 class UserOverview extends BaseWidget
 {
     protected static ?int $sort = 1;
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->can('widget_UserOverview');
+    }
+
     protected function getStats(): array
     {
         return [

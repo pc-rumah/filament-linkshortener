@@ -11,6 +11,12 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class ListUser extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->can('widget_ListUser');
+    }
+
     public function table(Table $table): Table
     {
         return $table

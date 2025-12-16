@@ -12,6 +12,11 @@ class User extends Page
 
     protected static string $view = 'filament.pages.user';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('page_User');
+    }
+
     protected function getHeaderWidgets(): array
     {
         return [
