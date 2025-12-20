@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessInvoiceEmail;
 use App\Models\Plans;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Mail\InvoicePaidMail;
+use App\Services\InvoiceService;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 
 class CheckoutController extends Controller
@@ -92,6 +96,11 @@ class CheckoutController extends Controller
             return response()->json(['message' => 'invalid signature'], 403);
         }
 
+        // Prevent processing if already paid
+        if ($transaction->status === 'paid') {
+            return response()->json(['message' => 'already paid']);
+        }
+
         \Log::info('TRANSACTION STATUS', [
             'order_id' => $orderId,
             'status' => $status,
@@ -109,9 +118,10 @@ class CheckoutController extends Controller
                     'plan_id' => 2,
                     'plan_expired_at' => now()->addMonth()
                 ]);
-                \Log::info('TRANSACTION PAID & USER UPGRADED', [
-                    'user_id' => $transaction->user_id
-                ]);
+
+                // Kirim email
+                ProcessInvoiceEmail::dispatch($transaction);
+
                 // SIMPAN FLAG NOTIF (5 menit cukup)
                 Cache::put(
                     'payment_success_user_' . $transaction->user_id,

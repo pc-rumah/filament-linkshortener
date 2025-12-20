@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "bezhansalleh/filament-shield": "^3.9",
         "devonab/filament-easy-footer": "^1.1",
         "filament/filament": "^3.3",
@@ -25,7 +26,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "pestphp/pest-plugin-stressless": "^3.1",
+        "phpunit/phpunit": "11.5.15"
     },
     "autoload": {
         "psr-4": {
